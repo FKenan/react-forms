@@ -2,18 +2,26 @@ import { useRef, useState } from "react";
 
 export default function () {
   const [values, setValues] = useState({ email: "", password: "" });
-  const emailIsInvalid  = values.email !=="" && !values.email.includes("@")
-  const passwordIsInvalid = values.password !== "" && values.password.length <= 5
+  const [isEdited, setIsEdited] = useState({ email: false, password: false });
+
+  const emailIsInvalid = isEdited.email && !values.email.includes("@");
+  const passwordIsInvalid = isEdited.password && values.password.length <= 5;
 
   function handleSubmit(e) {
     e.preventDefault();
     setValues({ email: "", password: "" });
   }
 
+  function handleInputBlur(e) {
+    const name = e.target.name;
+    setIsEdited((prev) => ({ ...prev, [name]: true }));
+  }
+
   function handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
     setValues({ ...values, [name]: value });
+    setIsEdited((prev) => ({ ...prev, [name]: false }));
   }
 
   return (
@@ -34,8 +42,11 @@ export default function () {
             name="email"
             value={values.email}
             onChange={handleInputChange}
+            onBlur={handleInputBlur}
           />
-          {emailIsInvalid && (<div className="invalid-feedback d-block">Enter valid email.</div>)}
+          {emailIsInvalid && (
+            <div className="invalid-feedback d-block">Enter valid email.</div>
+          )}
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="form-label">
@@ -48,8 +59,13 @@ export default function () {
             name="password"
             value={values.password}
             onChange={handleInputChange}
+            onBlur={handleInputBlur}
           />
-          {passwordIsInvalid && (<div className="invalid-feedback d-block">Parola min. 5 karakter olmalıdır.</div>)}
+          {passwordIsInvalid && (
+            <div className="invalid-feedback d-block">
+              Parola min. 5 karakter olmalıdır.
+            </div>
+          )}
         </div>
         <div className="mb-3">
           <button className="btn btn-outline-warning me-2">Submit</button>
