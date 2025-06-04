@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 
 export default function () {
   const [values, setValues] = useState({ email: "", password: "" });
+  const emailIsInvalid  = values.email !=="" && !values.email.includes("@")
+  const passwordIsInvalid = values.password !== "" && values.password.length <= 5
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -33,6 +35,7 @@ export default function () {
             value={values.email}
             onChange={handleInputChange}
           />
+          {emailIsInvalid && (<div className="invalid-feedback d-block">Enter valid email.</div>)}
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="form-label">
@@ -46,6 +49,7 @@ export default function () {
             value={values.password}
             onChange={handleInputChange}
           />
+          {passwordIsInvalid && (<div className="invalid-feedback d-block">Parola min. 5 karakter olmalıdır.</div>)}
         </div>
         <div className="mb-3">
           <button className="btn btn-outline-warning me-2">Submit</button>
