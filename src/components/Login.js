@@ -10,7 +10,7 @@ export default function () {
     e.preventDefault();
     setEmailError(false)
     setPasswordError(false)
-    
+
     const emailVal = email.current.value;
     const passwordVal = password.current.value;
 
@@ -52,7 +52,7 @@ export default function () {
             name="email"
             ref={email}
           />
-          {emailIsInvalid && (
+          {emailError && (
             <div className="invalid-feedback d-block">Enter valid email.</div>
           )}
         </div>
@@ -67,7 +67,7 @@ export default function () {
             name="password"
             ref={password}
           />
-          {passwordIsInvalid && (
+          {passwordError && (
             <div className="invalid-feedback d-block">
               Parola min. 5 karakter olmalıdır.
             </div>

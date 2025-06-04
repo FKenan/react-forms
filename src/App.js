@@ -5,7 +5,7 @@ import Register from "./components/Register";
 function App() {
   return (
     <div className="container d-flex justify-content-center mt-4">
-     <LoginState/>
+     <Register/>
     </div>
   );
 }

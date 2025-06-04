@@ -1,18 +1,24 @@
 import { useRef, useState } from "react";
 
 export default function () {
+  const [passwordNotEqual, setPasswordNotEqual] = useState(false);
+
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);   // formdan veri almak için kullanılır.
+    const formData = new FormData(e.target); // formdan veri almak için kullanılır.
     console.log(formData.get("email")); // FormData kullanarak form verisi alma
     console.log(formData.getAll("hobbies")); //selectbox gibi birden fazla veri varsa getall kullanılır.
 
     const hobbies = formData.getAll("hobbies");
     const data = Object.fromEntries(formData.entries()); // sadece tekil verileri çeker. selectboxları bizim ayrıyetten eklememiz gerekli
     data.hobbies = hobbies;
-    console.log(data)
 
-    e.target.reset()  // formu resetleme
+    if (data.password !== data.repassword) {
+      setPasswordNotEqual(true);
+      return;
+    }
+
+    e.target.reset(); // formu resetleme
   }
 
   return (
@@ -23,12 +29,15 @@ export default function () {
           <p>Please enter your login and password!</p>
         </div>
         <div className="mb-3">
-          <label htmlFor="fullname" className="form-label"></label>
+          <label htmlFor="fullname" className="form-label">
+            Email
+          </label>
           <input
-            type="email"
+            type="text"
             className="form-control"
             id="fullname"
             name="fullname"
+            required
           />
           <label htmlFor="email" className="form-label">
             Email
@@ -38,6 +47,7 @@ export default function () {
             className="form-control"
             id="email"
             name="email"
+            required
           />
         </div>
         <div className="row mb-3">
@@ -51,6 +61,9 @@ export default function () {
                 className="form-control"
                 id="password"
                 name="password"
+                minLength={5}
+                maxLength={10}
+                required
               />
             </div>
           </div>
@@ -64,7 +77,13 @@ export default function () {
                 className="form-control"
                 id="repassword"
                 name="repassword"
+                required
               />
+              {passwordNotEqual && (
+                <div className="invalid-feedback d-block">
+                  Password not match!
+                </div>
+              )}
             </div>
           </div>
         </div>
