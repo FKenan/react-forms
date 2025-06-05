@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import Input from "./Input";
 
 export default function () {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -31,42 +32,26 @@ export default function () {
           <h1>Login</h1>
           <p>Please enter your login and password!</p>
         </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            value={values.email}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-          />
-          {emailIsInvalid && (
-            <div className="invalid-feedback d-block">Enter valid email.</div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            name="password"
-            value={values.password}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-          />
-          {passwordIsInvalid && (
-            <div className="invalid-feedback d-block">
-              Parola min. 5 karakter olmalıdır.
-            </div>
-          )}
-        </div>
+        <Input
+          labelText="Email"
+          id="email"
+          error={emailIsInvalid && "Enter valid email"}
+          value={values.email}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          type="email"
+          name="email"
+        />
+        <Input
+          id="password"
+          error={passwordIsInvalid && "Password is invalid"}
+          labelText="Password"
+          value={values.password}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          type="password"
+          name="password"
+        />
         <div className="mb-3">
           <button className="btn btn-outline-warning me-2">Submit</button>
         </div>
