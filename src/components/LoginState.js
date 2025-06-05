@@ -1,28 +1,27 @@
-import { useRef, useState } from "react";
 import Input from "./Input";
+import useInput from "../hooks/useInput";
+import { hasMinLength, isEmail, isNotEmpty } from "../utils/validation";
 
 export default function () {
-  const [values, setValues] = useState({ email: "", password: "" });
-  const [isEdited, setIsEdited] = useState({ email: false, password: false });
-
-  const emailIsInvalid = isEdited.email && !values.email.includes("@");
-  const passwordIsInvalid = isEdited.password && values.password.length <= 5;
+  const {
+    value: emailValue, // value değerini emailValue yani başka adla alma yöntemi.
+    handleInputChange: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+    hasError:emailHasError
+  } = useInput("",(value)=>isEmail(value) &&isNotEmpty(value));
+  const {
+    value: passwordValue, 
+    handleInputChange: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    hasError:passwordHasError
+  } = useInput("",value =>hasMinLength(value,5));
 
   function handleSubmit(e) {
     e.preventDefault();
-    setValues({ email: "", password: "" });
-  }
-
-  function handleInputBlur(e) {
-    const name = e.target.name;
-    setIsEdited((prev) => ({ ...prev, [name]: true }));
-  }
-
-  function handleInputChange(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setValues({ ...values, [name]: value });
-    setIsEdited((prev) => ({ ...prev, [name]: false }));
+    
+    if(emailHasError || passwordHasError){
+      return
+    }
   }
 
   return (
@@ -35,20 +34,20 @@ export default function () {
         <Input
           labelText="Email"
           id="email"
-          error={emailIsInvalid && "Enter valid email"}
-          value={values.email}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-          type="email"
+          error={emailHasError && "Enter valid email"}
+          value={emailValue}
+          onChange={handleEmailChange}
+          onBlur={handleEmailBlur}
+          type="email"    
           name="email"
         />
         <Input
           id="password"
-          error={passwordIsInvalid && "Password is invalid"}
+          error={passwordHasError && "Password is invalid"}
           labelText="Password"
-          value={values.password}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
+          value={passwordValue}
+          onChange={handlePasswordChange}
+          onBlur={handlePasswordBlur}
           type="password"
           name="password"
         />
